@@ -1,0 +1,8 @@
+package: webdav
+version: '1.0.0-beta1'
+author: Friends Of REDAXO
+supportpage: https://github.com/FriendsOfREDAXO/webdav
+
+requires:
+    redaxo: ^5.0.0
+    mediapool: ^2.0.0
