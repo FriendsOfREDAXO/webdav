@@ -37,7 +37,7 @@ class MediapoolDirectory extends DAV\Collection
             $media = rex_media::get($name);
             $path = $this->myPath . '/' . $name;
 
-            if ($media->getCategoryId() == $category->getId()) {
+            if ($media && $media->getCategoryId() == $category->getId()) {
                 return new MediapoolFile($path);
             }
 
@@ -66,35 +66,35 @@ class MediapoolDirectory extends DAV\Collection
     }
 
     /**
-     * @param $path
+     * @param string $path
      *
      * @return null|rex_media_category
      */
     public static function categoryForPath($path)
     {
         $parts = explode('/', ltrim($path, '/'));
-        $rootPart = array_shift($parts);
-        foreach(rex_media_category::getRootCategories() as $rootCategory) {
-            if ($rootCategory->getName() == $rootPart) {
+
+        return self::resolvePath(rex_media_category::getRootCategories(), $parts);
+    }
+
+    /**
+     * @param rex_media_category[] $categories
+     * @param string[] $parts
+     * @return null|rex_media_category
+     */
+    private static function resolvePath(array $categories, array $parts) {
+        $kidPart = array_shift($parts);
+
+        foreach($categories as $kid) {
+            if ($kidPart == $kid->getName()) {
                 if (0 === count($parts)) {
-                    return $rootCategory;
+                    return $kid;
                 }
 
-                $kids = $rootCategory->getChildren();
-                $kidPart = array_shift($parts);
-
-                foreach($kids as $kidCategory) {
-                    if ($kidPart == $kidCategory->getName()) {
-                        if (0 === count($parts)) {
-                            return $kidCategory;
-                        }
-                        /// XXX recursive lookup for more then 2 levels
-                    }
-                }
-                break;
+                return self::resolvePath($kid->getChildren(), $parts);
             }
         }
-        
+
         return null;
     }
 }
