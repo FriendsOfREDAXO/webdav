@@ -17,8 +17,7 @@ $plugin = new \Sabre\DAV\Browser\Plugin();
 $server->addPlugin($plugin);
 
 // We're required to set the base uri, it is recommended to put your webdav server on a root of a domain
-// XXX this assumes a GET URL of http://localhost/redaxo/redaxo/src/addons/webdav/server.php/
-$server->setBaseUri('/redaxo/redaxo/src/addons/webdav/server.php');
+$server->setBaseUri($_SERVER['SCRIPT_NAME']);
 
 // And off we go!
 $server->exec();
