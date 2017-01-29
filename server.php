@@ -10,6 +10,11 @@ $REX['BACKEND_FOLDER'] = 'redaxo';
 require '../../../src/core/boot.php';
 require_once 'vendor/autoload.php';
 
+if (!((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+    || $_SERVER['SERVER_PORT'] == 443)) {
+    throw new Exception('webdav requires a https/secure connection');
+}
+
 $publicDir = new MediapoolRoot();
 $server = new DAV\Server($publicDir);
 
