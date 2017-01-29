@@ -23,6 +23,10 @@ $authPlugin = new DAV\Auth\Plugin();
 $authPlugin->addBackend(new BasicAuth());
 $server->addPlugin($authPlugin);
 
+$lockBackend = new DAV\Locks\Backend\File(rex_path::addonData('webdav', 'locks.dat'));
+$lockPlugin = new Sabre\DAV\Locks\Plugin($lockBackend);
+$server->addPlugin($lockPlugin);
+
 // We're required to set the base uri, it is recommended to put your webdav server on a root of a domain
 $server->setBaseUri($_SERVER['SCRIPT_NAME']);
 
