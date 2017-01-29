@@ -22,9 +22,6 @@ $plugin = new DAV\Browser\Plugin();
 $server->addPlugin($plugin);
 
 $authPlugin = new DAV\Auth\Plugin();
-// DIGEST for windows net drive
-//$authPlugin->addBackend(new DigestAuth());
-// BASIC for browsers
 $authPlugin->addBackend(new BasicAuth());
 $server->addPlugin($authPlugin);
 
