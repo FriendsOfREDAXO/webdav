@@ -7,10 +7,10 @@ class BasicAuth extends DAV\Auth\Backend\AbstractBasic {
     {
         $login = new rex_backend_login();
         $login->setLogin($username, $password);
-        rex_logger::factory()->info("user:$username,pw:$password");
         if ($login->checkLogin()) {
             $user = $login->getUser();
-            return $user->isAdmin();
+            // XXX the mediapool check seems not to work right now.
+            return $user->isAdmin() || $user->getComplexPerm('media') && $user->getComplexPerm('media')->hasCategoryPerm(0);
         }
         return false;
     }
