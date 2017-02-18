@@ -2,13 +2,6 @@
 
 use Sabre\DAV;
 
-unset($REX);
-$REX['REDAXO'] = true;
-$REX['HTDOCS_PATH'] = '../../../../';
-$REX['BACKEND_FOLDER'] = 'redaxo';
-$REX['LOAD_PAGE'] = false;
-
-require '../../../src/core/boot.php';
 require_once 'vendor/autoload.php';
 
 if (!((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
