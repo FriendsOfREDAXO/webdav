@@ -50,6 +50,24 @@ class MediapoolFile extends DAV\File {
     }
 
     /**
+     * Returns the mime-type for a file
+     *
+     * If null is returned, we'll assume application/octet-stream
+     *
+     * @return mixed
+     */
+    function getContentType() {
+        $media = $this->mediaForPath($this->myPath);
+
+        if ($media->getType()) {
+            return $media->getType();
+        }
+
+        return null;
+
+    }
+
+    /**
      * @param $path
      * @return rex_media
      */
