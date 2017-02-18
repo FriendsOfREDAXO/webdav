@@ -6,6 +6,7 @@ unset($REX);
 $REX['REDAXO'] = true;
 $REX['HTDOCS_PATH'] = '../../../../';
 $REX['BACKEND_FOLDER'] = 'redaxo';
+$REX['LOAD_PAGE'] = false;
 
 require '../../../src/core/boot.php';
 require_once 'vendor/autoload.php';
@@ -13,6 +14,13 @@ require_once 'vendor/autoload.php';
 if (!((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
     || $_SERVER['SERVER_PORT'] == 443)) {
     throw new Exception('webdav requires a https/secure connection');
+}
+
+$user = rex_backend_login::createUser();
+if ($user) {
+    // we need the mediapool api, which will only be loaded in mediapool/boot.php
+    // when a backend user is logged in
+    include_once rex_path::core('packages.php');
 }
 
 $publicDir = new MediapoolRoot();
