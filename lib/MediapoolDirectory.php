@@ -66,6 +66,48 @@ class MediapoolDirectory extends DAV\Collection
     }
 
     /**
+     * Renames the node
+     *
+     * @param string $name The new name
+     * @return void
+     */
+    function setName($name) {
+        $category = $this->categoryForPath($this->myPath);
+
+        $db = rex_sql::factory();
+        $db->setTable(rex::getTablePrefix() . 'media_category');
+        $db->setValue('name', $name);
+        $db->setWhere(['id' => $category->getId()]);
+        $db->addGlobalUpdateFields();
+
+        $db->update();
+
+        rex_media_cache::deleteCategory($category->getId());
+    }
+
+    /**
+     * Creates a new subdirectory
+     *
+     * @param string $name
+     * @return void
+     */
+    function createDirectory($name) {
+        $category = $this->categoryForPath($this->myPath);
+
+        $db = rex_sql::factory();
+        $db->setTable(rex::getTablePrefix() . 'media_category');
+        $db->setValue('name', $name);
+        $db->setValue('parent_id', $category->getId());
+        $db->setValue('path', $category->getPath() . $category->getId().'|');
+        $db->addGlobalCreateFields();
+        $db->addGlobalUpdateFields();
+
+        $db->insert();
+
+        rex_media_cache::deleteCategoryList($category->getId());
+    }
+
+    /**
      * @param string $path
      *
      * @return null|rex_media_category
