@@ -9,7 +9,6 @@ class BasicAuth extends DAV\Auth\Backend\AbstractBasic {
         $login->setLogin($username, $password);
         if ($login->checkLogin()) {
             $user = $login->getUser();
-            // XXX the mediapool check seems not to work right now.
             return $user->isAdmin() || $user->getComplexPerm('media') && $user->getComplexPerm('media')->hasCategoryPerm(0);
         }
         return false;
