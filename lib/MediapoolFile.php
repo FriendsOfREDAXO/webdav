@@ -27,6 +27,12 @@ class MediapoolFile extends DAV\File {
         return $media->getSize();
     }
 
+    function getLastModified()
+    {
+        $media = $this->mediaForPath($this->myPath);
+        return $media->getUpdateDate();
+    }
+
     function getETag() {
         $media = $this->mediaForPath($this->myPath);
 

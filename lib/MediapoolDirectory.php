@@ -58,6 +58,12 @@ class MediapoolDirectory extends DAV\Collection
         return $category != null;
     }
 
+    function getLastModified()
+    {
+        $category = $this->categoryForPath($this->myPath);
+        return $category->getUpdateDate();
+    }
+
     function getName()
     {
         $category = $this->categoryForPath($this->myPath);
