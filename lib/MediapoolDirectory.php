@@ -2,7 +2,7 @@
 
 use Sabre\DAV;
 
-class MediapoolDirectory extends DAV\Collection
+class MediapoolDirectory extends DAV\Collection implements DAV\IMoveTarget
 {
     private $myPath;
 
@@ -111,6 +111,44 @@ class MediapoolDirectory extends DAV\Collection
         $db->insert();
 
         rex_media_cache::deleteCategoryList($category->getId());
+    }
+    
+    function moveInto($targetName, $sourcePath, DAV\INode $sourceNode) {
+        if ($sourceNode instanceof self) {
+            $sourceCategory = self::categoryForPath($sourceNode->myPath);
+            $targetCategory = self::categoryForPath($this->myPath);
+
+            $db = rex_sql::factory();
+            $db->setTable(rex::getTablePrefix() . 'media_category');
+            $db->setValue('parent_id', $targetCategory->getId());
+            $db->setValue('path', $targetCategory->getPath() . $targetCategory->getId().'|');
+            $db->setWhere(['id' => $sourceCategory->getId()]);
+            $db->addGlobalUpdateFields();
+
+            $db->update();
+
+            rex_media_cache::deleteCategory($sourceCategory->getId());
+            rex_media_cache::deleteCategory($targetCategory->getId());
+
+            return true;
+        } else if ($sourceNode instanceof MediapoolFile) {
+            $media = $sourceNode->getMedia();
+            $targetCategory = self::categoryForPath($this->myPath);
+
+            $db = rex_sql::factory();
+            $db->setTable(rex::getTablePrefix() . 'media');
+            $db->setValue('category_id', $targetCategory->getId());
+            $db->setWhere(['id' => $media->getId()]);
+            $db->addGlobalUpdateFields();
+
+            $db->update();
+
+            rex_media_cache::delete($media->getFileName());
+            rex_media_cache::deleteCategory($targetCategory->getId());
+
+            return true;
+        }
+        return false;
     }
 
     /**

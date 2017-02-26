@@ -71,6 +71,10 @@ class MediapoolFile extends DAV\File {
 
     }
 
+    function getMedia() {
+        return $this->mediaForPath($this->myPath);
+    }
+
     /**
      * @param $path
      * @return rex_media
