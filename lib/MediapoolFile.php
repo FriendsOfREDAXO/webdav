@@ -48,8 +48,6 @@ class MediapoolFile extends DAV\File {
         $media = $this->mediaForPath($this->myPath);
         $result = rex_mediapool_deleteMedia($media->getFileName());
 
-        $logger = rex_logger::factory();
-        $logger->log(E_USER_WARNING, 'webdav delete result '. $media->getFileName() .':'. $result['msg']);
         if (!$result['ok']) {
             throw new DAV\Exception\Forbidden($result['msg']);
         }
