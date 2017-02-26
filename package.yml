@@ -5,4 +5,5 @@ supportpage: https://github.com/FriendsOfREDAXO/webdav
 
 requires:
     redaxo: ^5.0.0
-    mediapool: ^2.0.0
+    packages:
+        mediapool: ^2.0.0
