@@ -6,5 +6,8 @@ daher werden ordner - wie im medienpool kategorien - dargestellt und nicht wie i
 
 Setup:
 - Addon installieren
+- Hinweise beachten
+  - http://sabre.io/dav/install/
+  - https://forum.owncloud.org/viewtopic.php?f=17&t=7536
 - webdav url: www.mydomain.org/redaxo/webdav.php
 - zugangsdaten: redaxo backend user/passwort
